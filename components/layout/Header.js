@@ -1,7 +1,8 @@
 import React from "react";
+import Link from "next/link";
+
 import Search from "../ui/Search";
 import Navbar from "./Navbar";
-import Link from "next/link";
 
 const Header = () => {
   return (
