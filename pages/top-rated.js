@@ -1,11 +1,11 @@
 import React from "react";
 import Layout from "../components/layout/Layout";
 
-export default function Us() {
+export default function TopRated() {
   return (
     <div>
       <Layout>
-        <h1>Us</h1>
+        <h1>TopRated</h1>
       </Layout>
     </div>
   );
