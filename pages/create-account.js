@@ -4,10 +4,7 @@ import styled from "@emotion/styled";
 import Layout from "../components/layout/Layout";
 import { Form, Field, InputSubmit, Error } from "../components/ui/Form";
 
-const H1 = styled.h1`
-  text-align: center;
-  margin-top: 5rem;
-`;
+import firebase from "../firebase";
 
 //Validation
 import useValidation from "../hooks/useValidation";
@@ -19,11 +16,12 @@ const INITIAL_STATE = {
   password: "",
 };
 
-const CreateAccount = () => {
-  function createAccount() {
-    console.log("Creating account...");
-  }
+const H1 = styled.h1`
+  text-align: center;
+  margin-top: 5rem;
+`;
 
+const CreateAccount = () => {
   const {
     values,
     errors,
@@ -33,6 +31,14 @@ const CreateAccount = () => {
   } = useValidation(INITIAL_STATE, validateCreateAccount, createAccount);
 
   const { name, email, password } = values;
+
+  async function createAccount() {
+    try {
+      await firebase.register(name, email, password);
+    } catch (error) {
+      console.error("Error creating the user", error.message);
+    }
+  }
 
   return (
     <div>
