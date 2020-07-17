@@ -27,7 +27,6 @@ const CreateAccount = () => {
   const {
     values,
     errors,
-    submitForm,
     handleSubmit,
     handleChange,
     handleBlur,
