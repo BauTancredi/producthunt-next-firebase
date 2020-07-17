@@ -1,4 +1,4 @@
-import React, { Fragment } from "react";
+import React, { Fragment, useContext } from "react";
 import Link from "next/link";
 import styled from "@emotion/styled";
 import { css } from "@emotion/core";
@@ -6,6 +6,8 @@ import { css } from "@emotion/core";
 import Search from "../ui/Search";
 import Navbar from "./Navbar";
 import Button from "../ui/Button";
+
+import { FirebaseContext } from "../../firebase";
 
 const HeaderContainer = styled.div`
   max-width: 1200px;
@@ -33,7 +35,7 @@ const Logo = styled.p`
 `;
 
 const Header = () => {
-  const user = false;
+  const { user, firebase } = useContext(FirebaseContext);
   return (
     <HeaderStyles>
       <HeaderContainer>
@@ -64,9 +66,11 @@ const Header = () => {
                   margin-right: 2rem;
                 `}
               >
-                Hi: Bau
+                Hi: {user.displayName}
               </p>
-              <Button bgColor="true">Sign out</Button>
+              <Button bgColor="true" onClick={() => firebase.logout()}>
+                Sign out
+              </Button>
             </Fragment>
           ) : (
             <Fragment>

@@ -6,7 +6,7 @@ const MyApp = (props) => {
   const user = useAuth();
   const { Component, pageProps } = props;
   return (
-    <FirebaseContext.Provider value={{ firebase }}>
+    <FirebaseContext.Provider value={{ firebase, user }}>
       <Component {...pageProps} />
     </FirebaseContext.Provider>
   );
