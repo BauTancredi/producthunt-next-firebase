@@ -15,7 +15,7 @@ const UseValidation = (initialState, validate, fn) => {
 
       setSubmitForm(false);
     }
-  }, []);
+  }, [errors]);
 
   const handleChange = (e) => {
     setValues({

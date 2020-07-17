@@ -1,23 +1,45 @@
 import React from "react";
-import { css } from "@emotion/core";
+import styled from "@emotion/styled";
 
 import Layout from "../components/layout/Layout";
 import { Form, Field, InputSubmit } from "../components/ui/Form";
 
-export default function CreateAccount() {
+const H1 = styled.h1`
+  text-align: center;
+  margin-top: 5rem;
+`;
+
+//Validation
+import useValidation from "../hooks/useValidation";
+import validateCreateAccount from "../validation/validateCreateAccount";
+
+const INITIAL_STATE = {
+  name: "",
+  email: "",
+  password: "",
+};
+
+const CreateAccount = () => {
+  function createAccount() {
+    console.log("Creating account...");
+  }
+
+  const {
+    values,
+    errors,
+    submitForm,
+    handleSubmit,
+    handleChange,
+  } = useValidation(INITIAL_STATE, validateCreateAccount, createAccount);
+
+  const { name, email, password } = values;
+
   return (
     <div>
       <Layout>
         <>
-          <h1
-            css={css`
-              text-align: center;
-              margin-top: 5rem;
-            `}
-          >
-            Create Account
-          </h1>
-          <Form>
+          <H1>Create Account</H1>
+          <Form onSubmit={handleSubmit} noValidate>
             <Field>
               <label htmlFor="name">Name</label>
               <input
@@ -25,6 +47,8 @@ export default function CreateAccount() {
                 id="name"
                 placeholder="Your Name"
                 name="name"
+                value={name}
+                onChange={handleChange}
               />
             </Field>
             <Field>
@@ -34,6 +58,8 @@ export default function CreateAccount() {
                 id="email"
                 placeholder="Your Email"
                 name="email"
+                value={email}
+                onChange={handleChange}
               />
             </Field>
             <Field>
@@ -43,6 +69,8 @@ export default function CreateAccount() {
                 id="password"
                 placeholder="Your Password"
                 name="password"
+                value={password}
+                onChange={handleChange}
               />
             </Field>
 
@@ -52,4 +80,6 @@ export default function CreateAccount() {
       </Layout>
     </div>
   );
-}
+};
+
+export default CreateAccount;
