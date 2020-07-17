@@ -33,8 +33,14 @@ export default function Login() {
 
   const { email, password } = values;
 
-  function login() {
-    console.log("Login");
+  async function login() {
+    try {
+      await firebase.login(email, password);
+      Router.push("/");
+    } catch (error) {
+      console.error("Error authenticating the user", error.message);
+      setError(error.message);
+    }
   }
 
   return (

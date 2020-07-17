@@ -10,7 +10,7 @@ class Firebase {
     this.auth = app.auth();
   }
 
-  //Register a user
+  // Register a user
   async register(name, email, password) {
     const newUser = await this.auth.createUserWithEmailAndPassword(
       email,
@@ -20,6 +20,11 @@ class Firebase {
     return await newUser.user.updateProfile({
       displayName: name,
     });
+  }
+
+  // User login
+  async login(email, password) {
+    return this.auth.signInWithEmailAndPassword(email, password);
   }
 }
 
