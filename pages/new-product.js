@@ -1,11 +1,11 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import styled from "@emotion/styled";
-import Router from "next/router";
+import Router, { useRouter } from "next/router";
 
 import Layout from "../components/layout/Layout";
 import { Form, Field, InputSubmit, Error } from "../components/ui/Form";
 
-import firebase from "../firebase";
+import { FirebaseContext } from "../firebase";
 
 //Validation
 import useValidation from "../hooks/useValidation";
@@ -36,7 +36,27 @@ export default function NewProduct() {
 
   const { name, company, image, url, description } = values;
 
-  async function createProduct() {}
+  const router = useRouter();
+
+  const { user, firebase } = useContext(FirebaseContext);
+
+  async function createProduct() {
+    if (!user) return router.push("/login");
+
+    // New product object
+    const product = {
+      name,
+      company,
+      url,
+      description,
+      votes: 0,
+      comments: [],
+      created: Date.now(),
+    };
+
+    // Insert to DB
+    firebase.db.collection("products").add(product);
+  }
 
   return (
     <div>
