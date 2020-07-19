@@ -9,7 +9,7 @@ import firebase from "../firebase";
 
 //Validation
 import useValidation from "../hooks/useValidation";
-import validateCreateAccount from "../validation/validateCreateAccount";
+import validateCreateProduct from "../validation/validateCreateProduct";
 
 const INITIAL_STATE = {
   name: "",
@@ -32,11 +32,11 @@ export default function NewProduct() {
     handleSubmit,
     handleChange,
     handleBlur,
-  } = useValidation(INITIAL_STATE, validateCreateAccount, createAccount);
+  } = useValidation(INITIAL_STATE, validateCreateProduct, createProduct);
 
   const { name, company, image, url, description } = values;
 
-  async function createAccount() {}
+  async function createProduct() {}
 
   return (
     <div>
@@ -74,7 +74,7 @@ export default function NewProduct() {
 
               {errors.company && <Error>{errors.company}</Error>}
 
-              <Field>
+              {/* <Field>
                 <label htmlFor="image">Image</label>
                 <input
                   type="file"
@@ -86,7 +86,7 @@ export default function NewProduct() {
                 />
               </Field>
 
-              {errors.image && <Error>{errors.image}</Error>}
+              {errors.image && <Error>{errors.image}</Error>} */}
 
               <Field>
                 <label htmlFor="url">URL</label>
