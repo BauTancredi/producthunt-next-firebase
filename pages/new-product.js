@@ -60,6 +60,10 @@ export default function NewProduct() {
       votes: 0,
       comments: [],
       created: Date.now(),
+      createdBy: {
+        id: user.uid,
+        name: user.displayName,
+      },
     };
 
     // Insert to DB

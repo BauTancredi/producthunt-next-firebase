@@ -66,6 +66,7 @@ const Product = () => {
     urlImage,
     votes,
     description,
+    createdBy,
   } = product;
 
   return (
@@ -77,6 +78,9 @@ const Product = () => {
           <ProductContainter>
             <div>
               <p>Published {formatDistanceToNow(new Date(created))} ago</p>
+              <p>
+                Published by: {createdBy.displayName} from {company}
+              </p>
               <img src={urlImage} />
               <p>{description}</p>
 
@@ -100,6 +104,7 @@ const Product = () => {
               <Button target="_blank" bgColor="true" href={url}>
                 Visit URL
               </Button>
+
               <PVotes>{votes} Votes</PVotes>
               <Button>Vote</Button>
             </aside>
