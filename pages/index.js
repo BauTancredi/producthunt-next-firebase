@@ -1,6 +1,9 @@
 import React, { useEffect, useState, useContext } from "react";
-import Layout from "../components/layout/Layout";
+
 import { FirebaseContext } from "../firebase";
+
+import Layout from "../components/layout/Layout";
+import ProductDetails from "../components/layout/ProductDetails";
 
 export default function Home() {
   const [products, setProducts] = useState([]);
@@ -17,7 +20,7 @@ export default function Home() {
   }, []);
 
   function manageSnapshot(snapshot) {
-    const products = snapshots.docs.map((doc) => {
+    const products = snapshot.docs.map((doc) => {
       return {
         id: doc.id,
         ...doc.data(),
@@ -30,7 +33,15 @@ export default function Home() {
   return (
     <div>
       <Layout>
-        <h1>Inicio</h1>
+        <div className="listado-productos">
+          <div className="contenedor">
+            <div className="bg-white">
+              {products.map((product) => (
+                <ProductDetails key={product.id} product={product} />
+              ))}
+            </div>
+          </div>
+        </div>
       </Layout>
     </div>
   );
