@@ -20,7 +20,6 @@ const ProductDetails = ({ product }) => {
     description,
   } = product;
 
-  console.log(product);
   return (
     <li>
       <div>
