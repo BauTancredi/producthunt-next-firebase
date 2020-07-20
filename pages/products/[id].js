@@ -7,6 +7,7 @@ import Layout from "../../components/layout/Layout";
 import { FirebaseContext } from "../../firebase";
 import Error404 from "../../components/layout/404";
 import { Field, InputSubmit } from "../../components/ui/Form";
+import Button from "../../components/ui/Button";
 
 const H1 = styled.h1`
   text-align: center;
@@ -14,6 +15,10 @@ const H1 = styled.h1`
 `;
 const H2 = styled.h2`
   margin: 2rem 0;
+`;
+
+const PVotes = styled.p`
+  text-align: center;
 `;
 
 const ProductContainter = styled.div`
@@ -91,7 +96,13 @@ const Product = () => {
                 </li>
               ))}
             </div>
-            <aside></aside>
+            <aside>
+              <Button target="_blank" bgColor="true" href={url}>
+                Visit URL
+              </Button>
+              <PVotes>{votes} Votes</PVotes>
+              <Button>Vote</Button>
+            </aside>
           </ProductContainter>
         </div>
       </>
