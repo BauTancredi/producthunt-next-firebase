@@ -38,6 +38,16 @@ const Comment = styled.li`
   padding: 2rem;
 `;
 
+const ProductCreator = styled.p`
+  padding: 0.5rem 2rem;
+  background-color: #da552f;
+  color: #fff;
+  text-transform: uppercase;
+  font-weight: bold;
+  display: inline-block;
+  text-align: center;
+`;
+
 const Product = () => {
   const [product, setProduct] = useState({});
   const [error, setError] = useState(false);
@@ -137,6 +147,14 @@ const Product = () => {
       comments: newComments,
     });
   };
+
+  // Identifies if the comment is from the creator.
+  const isCreator = (id) => {
+    if (createdBy.id == id) {
+      return true;
+    }
+  };
+
   return (
     <Layout>
       <>
@@ -180,6 +198,9 @@ const Product = () => {
                       <p>
                         Writed by: <WrittenBy>{comment.userName}</WrittenBy>
                       </p>
+                      {isCreator(comment.userId) && (
+                        <ProductCreator>Creator</ProductCreator>
+                      )}
                     </Comment>
                   ))}
                 </ul>
