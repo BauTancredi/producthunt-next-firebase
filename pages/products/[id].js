@@ -29,9 +29,19 @@ const ProductContainter = styled.div`
   }
 `;
 
+const WrittenBy = styled.span`
+  font-weight: bold;
+`;
+
+const Comment = styled.li`
+  border: 1px solid #e1e1e1;
+  padding: 2rem;
+`;
+
 const Product = () => {
   const [product, setProduct] = useState({});
   const [error, setError] = useState(false);
+  const [comment, setComment] = useState({});
 
   // Routing for getting the actual id
   const router = useRouter();
@@ -95,6 +105,38 @@ const Product = () => {
     });
   };
 
+  const handleChange = (e) => {
+    setComment({
+      ...comment,
+      [e.target.name]: e.target.value,
+    });
+  };
+
+  // Add comment
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    if (!user) return router.push("/login");
+
+    // Info extra for comment
+    comment.userId = user.uid;
+    comment.userName = user.displayName;
+
+    // Add comment to array
+    const newComments = [...comments, comment];
+
+    // Update DB
+    firebase.db
+      .collection("products")
+      .doc(id)
+      .update({ comments: newComments });
+
+    // Update state
+    setProduct({
+      ...product,
+      comments: newComments,
+    });
+  };
   return (
     <Layout>
       <>
@@ -113,9 +155,13 @@ const Product = () => {
               {user && (
                 <>
                   <h2>Add comments</h2>
-                  <form>
+                  <form onSubmit={handleSubmit}>
                     <Field>
-                      <input type="text" name="message" />
+                      <input
+                        type="text"
+                        name="message"
+                        onChange={handleChange}
+                      />
                     </Field>
                     <InputSubmit type="submit" value="Add comment" />
                   </form>
@@ -123,12 +169,21 @@ const Product = () => {
               )}
 
               <H2>Comments</H2>
-              {comments.map((comment) => (
-                <li>
-                  <p>{comment.name}</p>
-                  <p>Writed by: {comment.userName}</p>
-                </li>
-              ))}
+
+              {comments.lentgh === 0 ? (
+                "There are no comments"
+              ) : (
+                <ul>
+                  {comments.map((comment, index) => (
+                    <Comment key={`${comment.userId}-${index}`}>
+                      <p>{comment.message}</p>
+                      <p>
+                        Writed by: <WrittenBy>{comment.userName}</WrittenBy>
+                      </p>
+                    </Comment>
+                  ))}
+                </ul>
+              )}
             </div>
             <aside>
               <Button target="_blank" bgColor="true" href={url}>
