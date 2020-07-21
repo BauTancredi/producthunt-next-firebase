@@ -69,6 +69,22 @@ const Product = () => {
     createdBy,
   } = product;
 
+  const voteProduct = () => {
+    if (!user) return router.push("/login");
+
+    // Get votes and sum
+    const newTotal = votes + 1;
+
+    // Update DB
+    firebase.db.collection("products").doc(id).update({ votes: newTotal });
+
+    // Update state
+    setProduct({
+      ...product,
+      votes: newTotal,
+    });
+  };
+
   return (
     <Layout>
       <>
@@ -111,7 +127,7 @@ const Product = () => {
 
               <PVotes>{votes} Votes</PVotes>
 
-              {user && <Button>Vote</Button>}
+              {user && <Button onClick={voteProduct}>Vote</Button>}
             </aside>
           </ProductContainter>
         </div>
