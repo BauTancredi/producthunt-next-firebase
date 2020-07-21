@@ -52,6 +52,7 @@ const Product = () => {
   const [product, setProduct] = useState({});
   const [error, setError] = useState(false);
   const [comment, setComment] = useState({});
+  const [queryDatabase, setQueryDatabase] = useState(true);
 
   // Routing for getting the actual id
   const router = useRouter();
@@ -63,18 +64,23 @@ const Product = () => {
   const { firebase, user } = useContext(FirebaseContext);
 
   useEffect(() => {
-    if (id) {
+    if (id && queryDatabase) {
       const getProduct = async () => {
         const productQuery = await firebase.db.collection("products").doc(id);
         const product = await productQuery.get();
-        if (product.exists) setProduct(product.data());
-        else setError(true);
+        if (product.exists) {
+          setProduct(product.data());
+          setQueryDatabase(false);
+        } else {
+          setError(true);
+          setQueryDatabase(false);
+        }
       };
       getProduct();
     }
-  }, [id, product]);
+  }, [id]);
 
-  if (Object.keys(product).length === 0) return "Loading...";
+  if (Object.keys(product).length === 0 && !error) return "Loading...";
 
   const {
     comments,
@@ -113,6 +119,8 @@ const Product = () => {
       ...product,
       votes: newTotal,
     });
+
+    setQueryDatabase(true);
   };
 
   const handleChange = (e) => {
@@ -146,6 +154,8 @@ const Product = () => {
       ...product,
       comments: newComments,
     });
+
+    setQueryDatabase(true);
   };
 
   // Identifies if the comment is from the creator.
@@ -158,65 +168,68 @@ const Product = () => {
   return (
     <Layout>
       <>
-        {error && <Error404 />}
-        <div className="contenedor">
-          <H1>{name}</H1>
-          <ProductContainter>
-            <div>
-              <p>Published {formatDistanceToNow(new Date(created))} ago</p>
-              <p>
-                Published by: {createdBy.displayName} from {company}
-              </p>
-              <img src={urlImage} />
-              <p>{description}</p>
+        {error ? (
+          <Error404 />
+        ) : (
+          <div className="contenedor">
+            <H1>{name}</H1>
+            <ProductContainter>
+              <div>
+                <p>Published {formatDistanceToNow(new Date(created))} ago</p>
+                <p>
+                  Published by: {createdBy.displayName} from {company}
+                </p>
+                <img src={urlImage} />
+                <p>{description}</p>
 
-              {user && (
-                <>
-                  <h2>Add comments</h2>
-                  <form onSubmit={handleSubmit}>
-                    <Field>
-                      <input
-                        type="text"
-                        name="message"
-                        onChange={handleChange}
-                      />
-                    </Field>
-                    <InputSubmit type="submit" value="Add comment" />
-                  </form>
-                </>
-              )}
+                {user && (
+                  <>
+                    <h2>Add comments</h2>
+                    <form onSubmit={handleSubmit}>
+                      <Field>
+                        <input
+                          type="text"
+                          name="message"
+                          onChange={handleChange}
+                        />
+                      </Field>
+                      <InputSubmit type="submit" value="Add comment" />
+                    </form>
+                  </>
+                )}
 
-              <H2>Comments</H2>
+                <H2>Comments</H2>
 
-              {comments.lentgh === 0 ? (
-                "There are no comments"
-              ) : (
-                <ul>
-                  {comments.map((comment, index) => (
-                    <Comment key={`${comment.userId}-${index}`}>
-                      <p>{comment.message}</p>
-                      <p>
-                        Writed by: <WrittenBy>{comment.userName}</WrittenBy>
-                      </p>
-                      {isCreator(comment.userId) && (
-                        <ProductCreator>Creator</ProductCreator>
-                      )}
-                    </Comment>
-                  ))}
-                </ul>
-              )}
-            </div>
-            <aside>
-              <Button target="_blank" bgColor="true" href={url}>
-                Visit URL
-              </Button>
+                {comments.lentgh === 0 ? (
+                  "There are no comments"
+                ) : (
+                  <ul>
+                    {comments.map((comment, index) => (
+                      <Comment key={`${comment.userId}-${index}`}>
+                        <p>{comment.message}</p>
+                        <p>
+                          Writed by: <WrittenBy>{comment.userName}</WrittenBy>
+                        </p>
+                        {isCreator(comment.userId) && (
+                          <ProductCreator>Creator</ProductCreator>
+                        )}
+                      </Comment>
+                    ))}
+                  </ul>
+                )}
+              </div>
+              <aside>
+                <Button target="_blank" bgColor="true" href={url}>
+                  Visit URL
+                </Button>
 
-              <PVotes>{votes} Votes</PVotes>
+                <PVotes>{votes} Votes</PVotes>
 
-              {user && <Button onClick={voteProduct}>Vote</Button>}
-            </aside>
-          </ProductContainter>
-        </div>
+                {user && <Button onClick={voteProduct}>Vote</Button>}
+              </aside>
+            </ProductContainter>
+          </div>
+        )}
       </>
     </Layout>
   );

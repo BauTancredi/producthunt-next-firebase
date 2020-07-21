@@ -146,7 +146,7 @@ export default function NewProduct() {
                     accept="image/*"
                     id="image"
                     name="image"
-                    randomizeFileName
+                    randomizefilename="true"
                     storageRef={firebase.storage.ref("products")}
                     onUploadStart={handleUploadStart}
                     onUploadError={handleUploadError}
