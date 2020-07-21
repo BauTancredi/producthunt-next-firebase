@@ -52,7 +52,7 @@ const Product = () => {
       };
       getProduct();
     }
-  }, [id]);
+  }, [id, product]);
 
   if (Object.keys(product).length === 0) return "Loading...";
 
@@ -67,6 +67,7 @@ const Product = () => {
     votes,
     description,
     createdBy,
+    hasVoted,
   } = product;
 
   const voteProduct = () => {
@@ -75,8 +76,17 @@ const Product = () => {
     // Get votes and sum
     const newTotal = votes + 1;
 
+    // Validate if actual user has voted
+    if (hasVoted.includes(user.uid)) return;
+
+    // Add user to hasVoted array
+    const newHasVoted = [...hasVoted, user.uid];
+
     // Update DB
-    firebase.db.collection("products").doc(id).update({ votes: newTotal });
+    firebase.db
+      .collection("products")
+      .doc(id)
+      .update({ votes: newTotal, hasVoted: newHasVoted });
 
     // Update state
     setProduct({

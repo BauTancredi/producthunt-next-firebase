@@ -65,6 +65,7 @@ export default function NewProduct() {
         id: user.uid,
         name: user.displayName,
       },
+      hasVoted: [],
     };
 
     // Insert to DB
