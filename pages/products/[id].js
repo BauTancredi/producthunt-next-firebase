@@ -40,7 +40,7 @@ const Product = () => {
     query: { id },
   } = router;
 
-  const { firebase } = useContext(FirebaseContext);
+  const { firebase, user } = useContext(FirebaseContext);
 
   useEffect(() => {
     if (id) {
@@ -84,13 +84,17 @@ const Product = () => {
               <img src={urlImage} />
               <p>{description}</p>
 
-              <h2>Add comments</h2>
-              <form>
-                <Field>
-                  <input type="text" name="message" />
-                </Field>
-                <InputSubmit type="submit" value="Add comment" />
-              </form>
+              {user && (
+                <>
+                  <h2>Add comments</h2>
+                  <form>
+                    <Field>
+                      <input type="text" name="message" />
+                    </Field>
+                    <InputSubmit type="submit" value="Add comment" />
+                  </form>
+                </>
+              )}
 
               <H2>Comments</H2>
               {comments.map((comment) => (
@@ -106,7 +110,8 @@ const Product = () => {
               </Button>
 
               <PVotes>{votes} Votes</PVotes>
-              <Button>Vote</Button>
+
+              {user && <Button>Vote</Button>}
             </aside>
           </ProductContainter>
         </div>

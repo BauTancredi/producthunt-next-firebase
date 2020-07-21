@@ -7,7 +7,7 @@ const H1 = styled.h1`
 `;
 
 const Error404 = () => {
-  return <H1>Product does not exist</H1>;
+  return <H1>Not available</H1>;
 };
 
 export default Error404;
